@@ -5,27 +5,24 @@ from google.oauth2.service_account import Credentials
 from datetime import datetime
 
 # ==========================================
-# 👇 તમારો ડેટા અહીં સેટ કરી દીધો છે 👇
+# 👇 તમારો ડેટા અહીં સેટ છે (DO NOT CHANGE) 👇
 # ==========================================
 
 SHEET_URL = "https://docs.google.com/spreadsheets/d/1zncebeUrh1Sfu1z0U1jdyErRboXiDZ3xeSt9NclbuYg/edit?usp=sharing"
 
-# આ તમારી ઓરિજિનલ ચાવી છે (હવે આમાં ભૂલ નહીં પડે)
-JSON_DATA = """
-{
+# અહીં મેં ડાયરેક્ટ Python ફોર્મેટ કરી દીધું છે એટલે હવે એરર નહીં આવે
+GOOGLE_CREDENTIALS = {
   "type": "service_account",
   "project_id": "cool-beanbag-484808-f8",
   "private_key_id": "55038a369d1c650dc1c89f878f47ab8d89de76ce",
-  "private_key": "-----BEGIN PRIVATE KEY-----\\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCsrpD3xZhHCROv\\nCo7IGIh1cNwY/D8CyTb1j4Jlqy8luTpBTR7SlOvbyRDM3tVlhdCL0UzlLF6WkdyM\\nsS8N58octJeqhhUYFK4eUc8pkD/iwX0EHq+3AXlmwILg9mH+1vWyntkTtXAYUAsq\\npg1AoMbxzYVTbfgJ9CWqlRO7Qr8AixD/m8TzPqxkZ7LGYnc4WfYYpj2eS/8hoArB\\nQMXca9jZgPLTtf4xLRveC3XeP1zxa1RyETtHo8A13Fm+j5jTr6OlrYUilc4ED8Xk\\n6qTIZ47NJu/h5TUvy4UkHpjz+gHBuxndAPYAbAMe50SctZsqP4IvQeCC8PjC8H2a\\nzeFToNQlAgMBAAECggEAEi3oliUnxGa4u0dVw8wNZavFiB3aNl1fm1eJ51Evy/1l\\nnCVV1t6VvBQ9YAwflCoTy/xzZ3cV2C0v9mHa7dBWr1H12551Dw1yTT/YmuwURbeQ\\nBUSDxDT0BnTC8pMNuwn/YNgnS1NhIzYeDtXfdEvY1fEIlcFwiP+6jWxXYPIEcLaG\\n2JDMPTKRArAAeRQ7W7xPSq9RIElzYxRSZMy+Z68vj3/t/x4BuqzO0QukHX3YP2Ce\\n4Icm/Q4yBtiOnAijUdC7lwzdDdRwwyA9/PgV/k8uPuRCsVu9BJK85a5b+wtjYXH4\\n01cXYFldCPny9IkffcpEOl0M5WTRLBdskWnEbXpBAQKBgQDls3//pymKbSou/8j2\\nFkBQm/YelaGLvmgJCToVy1iBtCXRq0JqjjH1sfUA+p5eBthBFShkNMtfsiNm1Xhv\\nNZtE5edNtqCTwAqY1hQ+wWEVkeo7WhEz1FXgz740qJCc4ae6C9qlVrX+pZnEpWBq\\n91fxgjQbJgnOi4qi22e5w4QfgQKBgQDAc9d4HupcyPPR6gIHc45bQqvveyXVhuL7\\ny9WqZHa2+qGEJm3eTU5kfnqhvj96KwK/6QN/tEdL+dJiqjCVl58bIodW8/tda152\\nf21gbbkcASs+m/WukP3HMSL6eiYzg7Ecy5Zuf6QN+Qcxy6B8NntRT2+teae\\nVGDWBHuGpQKBgFFu25gE6UM8BFJ5OAOWS+LIB+872POz4yog7UjAuHXzKd01O+yO\\n0MNr/ZIFR5PKFWytVY6A8QDSJJ7WW0YB2TQJ1YDFmBQJZzhb3P2KjSKaglHcUnDv\\nfCqhO6trfyk/Drl0bmVjYk4O437FqnMBkVn7cQGW8K8a5WFrK1C+Md8BAoGBAJkv\\nW9G0Ie3K0jBC6GyP8T742axcRGgq3p93xtHC96973XY3tHoe5IgfGHOH4DTY6W5i\\nBbPvhlSWPHzmZJedwTozCLEQsQLSBLWjhiccDxyYXZiPQUY7CJU1qlbfRWr5ps95\\nzSi6nhkzb8nRgxPZA07QrFYtKBGV7kQWe6G+nag1AoGBAMM9qYynr5i5nBA7/ns+\\nysNMFxuCQERNizkp+Gm/rUIjqwuYKCok4p52yr60fqj+X1vxLhbM/q+qinNSNnTa\\nlyi2RR/SiIaaZ2gR1K+CEomlgMnhX3If4l1Nz2e5RoR4vCqPadxa/VmTjFmO7iHk\\nx3xPeY3WXK3csWDmTKmP/Srw\\n-----END PRIVATE KEY-----\\n",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCsrpD3xZhHCROv\nCo7IGIh1cNwY/D8CyTb1j4Jlqy8luTpBTR7SlOvbyRDM3tVlhdCL0UzlLF6WkdyM\nsS8N58octJeqhhUYFK4eUc8pkD/iwX0EHq+3AXlmwILg9mH+1vWyntkTtXAYUAsq\npg1AoMbxzYVTbfgJ9CWqlRO7Qr8AixD/m8TzPqxkZ7LGYnc4WfYYpj2eS/8hoArB\nQMXca9jZgPLTtf4xLRveC3XeP1zxa1RyETtHo8A13Fm+j5jTr6OlrYUilc4ED8Xk\n6qTIZ47NJu/h5TUvy4UkHpjz+gHBuxndAPYAbAMe50SctZsqP4IvQeCC8PjC8H2a\nzeFToNQlAgMBAAECggEAEi3oliUnxGa4u0dVw8wNZavFiB3aNl1fm1eJ51Evy/1l\nnCVV1t6VvBQ9YAwflCoTy/xzZ3cV2C0v9mHa7dBWr1H12551Dw1yTT/YmuwURbeQ\nBUSDxDT0BnTC8pMNuwn/YNgnS1NhIzYeDtXfdEvY1fEIlcFwiP+6jWxXYPIEcLaG\n2JDMPTKRArAAeRQ7W7xPSq9RIElzYxRSZMy+Z68vj3/t/x4BuqzO0QukHX3YP2Ce\n4Icm/Q4yBtiOnAijUdC7lwzdDdRwwyA9/PgV/k8uPuRCsVu9BJK85a5b+wtjYXH4\n01cXYFldCPny9IkffcpEOl0M5WTRLBdskWnEbXpBAQKBgQDls3//pymKbSou/8j2\nFkBQm/YelaGLvmgJCToVy1iBtCXRq0JqjjH1sfUA+p5eBthBFShkNMtfsiNm1Xhv\nNZtE5edNtqCTwAqY1hQ+wWEVkeo7WhEz1FXgz740qJCc4ae6C9qlVrX+pZnEpWBq\n91fxgjQbJgnOi4qi22e5w4QfgQKBgQDAc9d4HupcyPPR6gIHc45bQqvveyXVhuL7\ny9WqZHa2+qGEJm3eTU5kfnqhvj96KwK/6QN/tEdL+dJiqjCVl58bIodW8/tda152\nf21gbbkcASs+m/WukP3HMSL6eiYzg7Ecy5Zuf6QN+Qcxy6B8NntRT2+teae\nVGDWBHuGpQKBgFFu25gE6UM8BFJ5OAOWS+LIB+872POz4yog7UjAuHXzKd01O+yO\n0MNr/ZIFR5PKFWytVY6A8QDSJJ7WW0YB2TQJ1YDFmBQJZzhb3P2KjSKaglHcUnDv\nfCqhO6trfyk/Drl0bmVjYk4O437FqnMBkVn7cQGW8K8a5WFrK1C+Md8BAoGBAJkv\nW9G0Ie3K0jBC6GyP8T742axcRGgq3p93xtHC96973XY3tHoe5IgfGHOH4DTY6W5i\nBbPvhlSWPHzmZJedwTozCLEQsQLSBLWjhiccDxyYXZiPQUY7CJU1qlbfRWr5ps95\nzSi6nhkzb8nRgxPZA07QrFYtKBGV7kQWe6G+nag1AoGBAMM9qYynr5i5nBA7/ns+\nysNMFxuCQERNizkp+Gm/rUIjqwuYKCok4p52yr60fqj+X1vxLhbM/q+qinNSNnTa\nlyi2RR/SiIaaZ2gR1K+CEomlgMnhX3If4l1Nz2e5RoR4vCqPadxa/VmTjFmO7iHk\nx3xPeY3WXK3csWDmTKmP/Srw\n-----END PRIVATE KEY-----\n",
   "client_email": "tatva-bot@cool-beanbag-484808-f8.iam.gserviceaccount.com",
   "client_id": "111819596221554520240",
   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
   "token_uri": "https://oauth2.googleapis.com/token",
   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/tatva-bot%40cool-beanbag-484808-f8.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
 }
-"""
 
 # ==========================================
 # 👆 અહી સુધી જ ફેરફાર છે 👆
@@ -37,9 +34,8 @@ st.set_page_config(page_title="Tatva OS", page_icon="🟠", layout="wide")
 def get_db_connection():
     try:
         scope = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
-        # Convert string back to JSON securely
-        info = json.loads(JSON_DATA, strict=False)
-        creds = Credentials.from_service_account_info(info, scopes=scope)
+        # Have JSON load ni jarur nathi, sidhu dictionary use karshe
+        creds = Credentials.from_service_account_info(GOOGLE_CREDENTIALS, scopes=scope)
         client = gspread.authorize(creds)
         return client.open_by_url(SHEET_URL).sheet1
     except Exception as e:
@@ -49,7 +45,7 @@ def get_db_connection():
 try:
     sheet = get_db_connection()
 except:
-    st.warning("JSON Key Error. Please check format.")
+    st.warning("Credential Error. Please check format.")
     st.stop()
 
 # --- DATABASE FUNCTIONS ---
