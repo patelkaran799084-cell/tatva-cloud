@@ -5,13 +5,14 @@ from google.oauth2.service_account import Credentials
 from datetime import datetime
 
 # ==========================================
-# 👇 તમારો ડેટા અહીં સેટ છે (DO NOT CHANGE) 👇
+# 👇 આ તમારો ડેટા છે (આને હવે અડતા નહીં) 👇
 # ==========================================
 
 SHEET_URL = "https://docs.google.com/spreadsheets/d/1zncebeUrh1Sfu1z0U1jdyErRboXiDZ3xeSt9NclbuYg/edit?usp=sharing"
 
-# અહીં મેં ડાયરેક્ટ Python ફોર્મેટ કરી દીધું છે એટલે હવે એરર નહીં આવે
-GOOGLE_CREDENTIALS = {
+# તમારી ચાવી (Key) અહીં સેટ કરેલી છે
+# (મેં નીચે કોડમાં .replace() મૂક્યું છે જેથી એરર ન આવે)
+CREDENTIALS_DATA = {
   "type": "service_account",
   "project_id": "cool-beanbag-484808-f8",
   "private_key_id": "55038a369d1c650dc1c89f878f47ab8d89de76ce",
@@ -25,7 +26,7 @@ GOOGLE_CREDENTIALS = {
 }
 
 # ==========================================
-# 👆 અહી સુધી જ ફેરફાર છે 👆
+# 👆 બસ અહી સુધી જ 👆
 # ==========================================
 
 st.set_page_config(page_title="Tatva OS", page_icon="🟠", layout="wide")
@@ -34,8 +35,11 @@ st.set_page_config(page_title="Tatva OS", page_icon="🟠", layout="wide")
 def get_db_connection():
     try:
         scope = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
-        # Have JSON load ni jarur nathi, sidhu dictionary use karshe
-        creds = Credentials.from_service_account_info(GOOGLE_CREDENTIALS, scopes=scope)
+        
+        # 👇 આ લાઈન જાદુ કરશે (એરર કાઢી નાખશે)
+        CREDENTIALS_DATA["private_key"] = CREDENTIALS_DATA["private_key"].replace("\\n", "\n")
+        
+        creds = Credentials.from_service_account_info(CREDENTIALS_DATA, scopes=scope)
         client = gspread.authorize(creds)
         return client.open_by_url(SHEET_URL).sheet1
     except Exception as e:
@@ -45,7 +49,7 @@ def get_db_connection():
 try:
     sheet = get_db_connection()
 except:
-    st.warning("Credential Error. Please check format.")
+    st.warning("Something went wrong. Please check your internet.")
     st.stop()
 
 # --- DATABASE FUNCTIONS ---
