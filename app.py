@@ -5,13 +5,12 @@ from google.oauth2.service_account import Credentials
 from datetime import datetime
 
 # ==========================================
-# 👇 આ તમારો ડેટા છે (આને હવે અડતા નહીં) 👇
+# 👇 તમારો ડેટા (આને હવે બદલતા નહીં) 👇
 # ==========================================
 
 SHEET_URL = "https://docs.google.com/spreadsheets/d/1zncebeUrh1Sfu1z0U1jdyErRboXiDZ3xeSt9NclbuYg/edit?usp=sharing"
 
-# તમારી ચાવી (Key) અહીં સેટ કરેલી છે
-# (મેં નીચે કોડમાં .replace() મૂક્યું છે જેથી એરર ન આવે)
+# તમારી ચાવી (Key) અહીં છે
 CREDENTIALS_DATA = {
   "type": "service_account",
   "project_id": "cool-beanbag-484808-f8",
@@ -26,7 +25,7 @@ CREDENTIALS_DATA = {
 }
 
 # ==========================================
-# 👆 બસ અહી સુધી જ 👆
+# 👆 કોડ પૂરો 👆
 # ==========================================
 
 st.set_page_config(page_title="Tatva OS", page_icon="🟠", layout="wide")
@@ -37,7 +36,9 @@ def get_db_connection():
         scope = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
         
         # 👇 આ લાઈન જાદુ કરશે (એરર કાઢી નાખશે)
-        CREDENTIALS_DATA["private_key"] = CREDENTIALS_DATA["private_key"].replace("\\n", "\n")
+        # આ લાઈન તમારી private_key માં રહેલી ભૂલ સુધારી દેશે
+        if "\\n" in CREDENTIALS_DATA["private_key"]:
+            CREDENTIALS_DATA["private_key"] = CREDENTIALS_DATA["private_key"].replace("\\n", "\n")
         
         creds = Credentials.from_service_account_info(CREDENTIALS_DATA, scopes=scope)
         client = gspread.authorize(creds)
